@@ -18,7 +18,7 @@ const validarJWT = (req = request, res = response, next)=>{
         const { uid } = jwt.verify(token, process.env.JWT_SECRET);
         //sI EL VERIFY DA ERROR IRA AL CATCH
         //Asi pasarias el uid osea machacarias el uid con el uid que te han pasado 
-        //req.uid = uid;
+        req.uid = uid;
         next()
 
 

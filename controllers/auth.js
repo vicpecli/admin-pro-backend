@@ -32,7 +32,7 @@ const login = async( req, resp = response)=>{
             })
         }
 
-        //Todo Generar el Tocken
+        //Todo Generar el Token
         const  token = await generarJWT(usuarioDB.id);
         resp.status(200).json({
             ok: true,

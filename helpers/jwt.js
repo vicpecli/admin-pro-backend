@@ -4,8 +4,9 @@ const generarJWT= (uid)=>{
 
     return new Promise((resolve, reject)=>{
 
+        console.log(uid)
         const payload={
-            uid
+            uid,
         }
     
         jwt.sign(payload, process.env.JWT_SECRET, {
@@ -17,20 +18,10 @@ const generarJWT= (uid)=>{
                 reject('No se pudo Generar el JWT')
     
             } else{
-
                 resolve(token)
-
             }
-    
         });
-
     })
-
-  
-
 }
 
-module.exports ={
-
-    generarJWT,
-}
+module.exports ={  generarJWT }

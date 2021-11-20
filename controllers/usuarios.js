@@ -6,14 +6,35 @@ const { generarJWT } = require('../helpers/jwt');
 
 const getUsuarios = async (request, response)=>{
     console.log('Llegoooo')
+    const desde = Number(request.query.desde) || 0;
 
-    const usuarios = await Usuario.find({}, 'nombre email role google'); //asi no pasas el password
 
+
+    console.log(desde)
+
+    // const usuarios = await Usuario
+    //                         .find({}, 'nombre email role google')//asi no pasas el password y pasas los que pones
+    //                         .skip(desde) //se salta los registros de ataras. Si pasas un 5 monstraria desde ewl 5 en adelante
+    //                         .limit(5)//Asi dices cuantos pasas
+
+    // const total = await Usuario.count();
+
+    //asi las dos promesas se ejecutan de manera simultanea
+
+    const [usuarios, total ] = await Promise.all([
+                    Usuario
+                            .find({}, 'nombre email role google img')//asi no pasas el password y pasas los que pones
+                            .skip(desde) //se salta los registros de ataras. Si pasas un 5 monstraria desde ewl 5 en adelante
+                            .limit(5),      //Asi dices cuantos pasas
+                    Usuario.countDocuments()
+    ])
+    
     response.status(200).json({
         ok: true,
         usuarios: [ {
             id:1233,
-            usuarios
+            usuarios,
+            total
         }]
     });
 
