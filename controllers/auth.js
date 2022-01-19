@@ -3,6 +3,8 @@ const{response} = require('express');
 const bcrypt = require('bcryptjs')
 const Usuario = require('../models/usuario');
 const { generarJWT } = require('../helpers/jwt');
+const {googleVerify}  =  require('../helpers/google-verify');
+const usuario = require('../models/usuario');
 
 
 const login = async( req, resp = response)=>{
@@ -32,19 +34,12 @@ const login = async( req, resp = response)=>{
             })
         }
 
-        //Todo Generar el Token
+        // Generar el Token
         const  token = await generarJWT(usuarioDB.id);
         resp.status(200).json({
             ok: true,
             token
         })
-
-
-     
-   
-        
-
-
     }catch(error){
        
         console.log(error);
@@ -59,6 +54,79 @@ const login = async( req, resp = response)=>{
 }
 
 
+const googleSignIn = async (req, res = response)=>{
+
+    const googleToken = req.body.token;
+
+    try{
+      const {name, email, picture}=  await googleVerify(googleToken) ;
+
+      // Revisar que no exista este usuario
+      const usuarioDB = await Usuario.findOne({email})
+      let usuario;
+
+      if(!usuarioDB){
+          usuario = new Usuario({
+               nombre: name,
+               email,
+               //al intentar hacer el login con esa contrasena cuando haga eso hara el hash de una sola via y ya no sera la misma 
+               password:'@@@',
+               img: picture,
+               google: true
+          });
+      }else {
+        //existe usuario
+        usuario = usuarioDB;
+        usuario.google = true;
+      }
+
+        //guardar en BD
+        await usuario.save()
+        // Generar el Token
+        const  token = await generarJWT(usuario.id);
+
+        res.status(200).json({
+            ok:true,
+            msg: "Google sign in",
+            token
+        })
+
+    }catch(error){
+    
+        resp.status(401).json({
+            ok: false,
+            msg:'Token no es correcto'
+        })
+    }
+
+}
+
+
+
+
+const renewToken = async (req, res = response)=>{
+
+    const uid = req.uid;
+    const usuarioDB= await Usuario.findById(uid)
+    
+
+    const token = await generarJWT(uid)
+
+        res.status(200).json({
+            ok:true,
+            msg: "Renew Token",
+            token,
+            usuarioDB
+        })
+
+
+
+
+}
+
+
 module.exports = {
-    login
+    login,
+    googleSignIn,
+    renewToken
 }

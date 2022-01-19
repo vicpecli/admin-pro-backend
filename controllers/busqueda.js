@@ -26,6 +26,7 @@ const getBusqueda = async(request, res = response)=>{
 
 const getDocumentosColeccion= async(request, res = response)=>{
 
+    console.log('POR COLECCION')
     const tabla =request.params.tabla
     const busqueda =request.params.busqueda
     const regularExpresion = new RegExp(busqueda, 'i');
@@ -37,13 +38,15 @@ const getDocumentosColeccion= async(request, res = response)=>{
             data = await Medico.find({nombre : regularExpresion})
                                 .populate('usuario', 'nombre img')
                                 .populate('hospital', 'nombre img')
+                                console.log('MEDICOS')
         break;
         case 'hospitales':
-            data = await Medico.find({nombre : regularExpresion})
-                                .populate('usuario', 'nombre img')
+            data = await Hospital.find({nombre : regularExpresion})
+                                console.log('Hospitales', data)
         break;
         case 'usuarios':
-            data = await Medico.find({nombre : regularExpresion})     
+            data = await Usuario.find({nombre : regularExpresion})  
+            console.log('Usuarios', data)   
         break;
         default:
             return res.status(400).json({

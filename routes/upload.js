@@ -19,10 +19,7 @@ router.put('/:tabla/:documento',
 ]  
 ,uploadDocument );
 
-router.get('/:tabla/:documento', 
-[
-    validarJWT,
-]  
+router.get('/:tabla/:documento'
 ,downloadDocument );
 
 

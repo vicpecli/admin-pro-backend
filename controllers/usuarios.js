@@ -31,11 +31,8 @@ const getUsuarios = async (request, response)=>{
     
     response.status(200).json({
         ok: true,
-        usuarios: [ {
-            id:1233,
-            usuarios,
-            total
-        }]
+        usuarios:  usuarios,
+        total
     });
 
 }
@@ -122,7 +119,10 @@ const  actualizarUsuario  = async(request, response = response)=>{
 
         }
 
+   
         const campos = request.body;
+     
+   
         const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, {new:true} );
         
         response.status(200).json({
