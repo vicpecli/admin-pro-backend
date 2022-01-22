@@ -2,6 +2,7 @@ const fs = require('fs')
 const Hospital = require('../models/hospital')
 const Usuario = require('../models/usuario')
 const Medico = require('../models/medicos')
+const {response, request} = require('express')
 
 const borrarImagen = (path) =>{
    
@@ -46,6 +47,7 @@ const actualizarImagen = async (tabla, id, nombreArchivo) =>{
 
             break;
         case 'usuarios':
+            console.log('usuarios')
             const usuario = await Usuario.findById(id);
             if(!usuario){
                 return false;
@@ -55,6 +57,7 @@ const actualizarImagen = async (tabla, id, nombreArchivo) =>{
             borrarImagen(pathViejo)
    
             usuario.img = nombreArchivo;
+            console.log(usuario)
             await usuario.save();
             return true;
 

@@ -11,15 +11,15 @@ const {actualizarImagen} = require('../helpers/actualizar-imagen')
 const uploadDocument= async(request, res = response)=>{
     console.log('Upload Document')
 
-    const tabla =request.params.tabla
-    const documento =request.params.documento
+    const tabla =request.params.tabla //USUARIOS
+    const documento =request.params.documento //UID DOCUMENTO
 
     const tiposValidos = ['hospitales', 'medicos', 'usuarios'];
    
     if(!tiposValidos.includes(tabla)){
         return res.status(400).json({
             ok:false,
-            msg:'La tabla tiene que ser Usuarios/Medicos/Hospitales'
+            msg:'La tabla tiene que ser Usuarios/medicos/hospitales'
         })
     }
 
@@ -31,6 +31,7 @@ const uploadDocument= async(request, res = response)=>{
     }
 
     //procesar la imagen
+    console.log('Seguimos subiendo documento')
 
     const file = request.files.imagen;
     const nombreCortado = file.name.split('.');//Picture.1.2.3.jpg
@@ -46,6 +47,7 @@ const uploadDocument= async(request, res = response)=>{
 
     //Generar el Nombre del Archivo
     const nombreArchivo = `${uuidv4()}.${extensionArchivo}`
+ 
 
     //path para guardar la imagen
     const path = `./uploads/${tabla}/${nombreArchivo}`

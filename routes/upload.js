@@ -13,11 +13,7 @@ const {   uploadDocument, downloadDocument } = require('../controllers/upload')
 const router = Router();
 
 router.use(expressFileUpload());
-router.put('/:tabla/:documento', 
-[
-    validarJWT,
-]  
-,uploadDocument );
+router.put('/:tabla/:documento', validarJWT,uploadDocument );
 
 router.get('/:tabla/:documento'
 ,downloadDocument );
